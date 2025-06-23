@@ -1,8 +1,9 @@
-import { action, createAsync, json, query, redirect, useSubmission } from "@solidjs/router"
-import { createEffect } from "solid-js"
+import { action, createAsync, redirect } from "@solidjs/router"
+import { For, Show } from "solid-js"
 import { getRequestEvent } from "solid-js/web"
 import { Button } from "~/components/ui/button"
 import Input from "~/components/ui/input"
+import { continueWithProvider, getAllProviders } from "~/oauth/OauthActions"
 
 const loginAction = action(async (formData:FormData)=> {
   "use server"
@@ -18,31 +19,9 @@ const loginAction = action(async (formData:FormData)=> {
   return redirect("/")
 })
 
-const getGoogleProvider = query(async () => {
-  "use server"
-  const event = getRequestEvent()
-  if (!event) throw new Error("no event")
-  let methods = await event.locals.pb.collection("users").listAuthMethods()
-  let google = methods.oauth2.providers.find(p => p.name === "google")
-  if (!google) throw new Error("google not set")
-  return json(google, {revalidate: "nothing"})
-},"googleAuth")
 
 const login = () => {
-  const googleProvider = createAsync(() => getGoogleProvider())
-
-  const sub = useSubmission(loginAction)
-  createEffect(() => {
-    console.log(sub.result)
-  })
-
-  const googleAuth = () => {
-    const provider = googleProvider()
-    if (!provider) return
-    let href = provider.authURL + "http://localhost:3000/googleRedirect"
-    localStorage.setItem("provider", JSON.stringify(provider));
-    window.open(href)
-  }
+  const providers = createAsync(() => getAllProviders())
 
   return (
     <>
@@ -54,7 +33,11 @@ const login = () => {
         <Button type="submit">Done</Button>
       </form>
 
-      <Button onclick={googleAuth}>Continue with Google</Button>
+      <Show when={providers()}>
+        <For each={providers()}>
+          {p => <Button onclick={() => continueWithProvider(p)}>Continue with {p.displayName}</Button>}
+        </For>
+      </Show>
     </>
   )
 }

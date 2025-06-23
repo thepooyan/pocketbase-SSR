@@ -15,7 +15,7 @@ const folan = action(async (provider: string, code: any, codeVerifier: string, r
   throw redirect("/")
 })
 
-const googleRedirect = () => {
+const oauthRedirect = () => {
   const action = useAction(folan)
   const [params, _] = useSearchParams()
 
@@ -30,4 +30,4 @@ const googleRedirect = () => {
   )
 }
 
-export default googleRedirect
+export default oauthRedirect
