@@ -1,4 +1,4 @@
-import { action, createAsync, json, query } from "@solidjs/router";
+import { createAsync, json, query } from "@solidjs/router";
 import { getRequestEvent, Show } from "solid-js/web";
 import { Button } from "~/components/ui/button";
 
@@ -21,7 +21,7 @@ const logout = async () => {
 
 export default function Home() {
   const user = createAsync(() => auth())
-  console.log(user()?.isValid)
+
   return (
     <>
       <Show when={user()?.isValid === true}>
