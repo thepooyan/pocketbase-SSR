@@ -14,7 +14,7 @@ export const getAllProviders = query(async () => {
 }, "googleAuth")
 
 export const continueWithProvider = (provider: AuthProviderInfo) => {
-  let href = provider.authURL + "http://localhost:3000/ouathRedirect"
+  let href = provider.authURL + import.meta.env.VITE_OAUTH_REDIRECT;
   localStorage.setItem("provider", JSON.stringify(provider));
   window.open(href)
 }
