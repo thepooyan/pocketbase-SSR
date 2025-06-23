@@ -19,8 +19,5 @@ export default createMiddleware({
       event.locals.pb.authStore.clear();
     }
 
-    event.response.headers.set("set-cookie",
-      event.locals.pb.authStore.exportToCookie()
-    );
   },
 });
