@@ -20,4 +20,7 @@ export default createMiddleware({
     }
 
   },
+  onBeforeResponse: async (event) => {
+    event.response.headers.set("set-cookie", event.locals.pb.authStore.exportToCookie())
+  }
 });

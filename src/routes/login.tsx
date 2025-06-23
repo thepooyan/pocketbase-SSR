@@ -13,16 +13,7 @@ const loginAction = action(async (formData:FormData)=> {
 
   if (!email || !pass || event === undefined) return {ok: false}
 
-  try {
-
   await event.locals.pb.collection("users").authWithPassword(email, pass);
-  event.response.headers.set("set-cookie",
-    event.locals.pb.authStore.exportToCookie()
-  );
-  } catch(err) {
-    console.log(err)
-    return {ok: false}
-  }
 
   return redirect("/")
 })

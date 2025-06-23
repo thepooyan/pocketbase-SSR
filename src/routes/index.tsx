@@ -17,7 +17,6 @@ const logout = async () => {
   const event = getRequestEvent()
   if (!event) return
   event.locals.pb.authStore.clear()
-  event.response.headers.set("set-cookie", event.locals.pb.authStore.exportToCookie())
 }
 
 export default function Home() {
